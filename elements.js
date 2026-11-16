@@ -24,10 +24,3 @@ var elements = {
         behavior: behaviors.WALL,
     },
 };
-
-var elementImages = {};
-for (var element in elements) {
-    var image = new Image();
-    image.src = elements[element].image;
-    elementImages[element] = image;
-}
