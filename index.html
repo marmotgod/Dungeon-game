@@ -69,36 +69,8 @@
             
         }
     </style>
-
+    <script src="elements.js"></script>
     <script>
-        // Object storing the various movement behaviors, represented by a number
-        var behaviors = {
-            "DL_DR": 0,
-            "L_R": 1,
-            "WALL": 2,
-        }
-
-        // Object storing various powders, called elements
-        var elements = {
-            "sand": {
-                "name": "sand",
-                "color": "#e6d577",
-                "image": "images/sand.png",
-                "behavior": behaviors.DL_DR,
-            },
-            "water": {
-                "name": "water",
-                "color": "#0000ff",
-                "image": "images/water.png",
-                "behavior": behaviors.L_R,
-            },
-            "wall": {
-                "name": "wall",
-                "color": "#808080",
-                "image": "images/golbin.png",
-                "behavior": behaviors.WALL,
-            },
-        }
 
         // Preload element images; the renderer uses each element's color until its image is ready.
         var elementImages = {};
