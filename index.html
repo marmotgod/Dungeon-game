@@ -83,18 +83,29 @@
             "sand": {
                 "name": "sand",
                 "color": "#e6d577",
+                "image": "images/sand.png",
                 "behavior": behaviors.DL_DR,
             },
             "water": {
                 "name": "water",
                 "color": "#0000ff",
+                "image": "images/water.png",
                 "behavior": behaviors.L_R,
             },
             "wall": {
                 "name": "wall",
                 "color": "#808080",
+                "image": "images/wall.png",
                 "behavior": behaviors.WALL,
             },
+        }
+
+        // Preload element images; the renderer uses each element's color until its image is ready.
+        var elementImages = {};
+        for (var element in elements) {
+            var image = new Image();
+            image.src = elements[element].image;
+            elementImages[element] = image;
         }
 
         currentPixels = [];
@@ -166,8 +177,16 @@
             for (var i = 0; i < currentPixels.length; i++) {
                 pixel = currentPixels[i];
                 pixelTick(pixel);
-                ctx.fillStyle = pixel.color;
-                ctx.fillRect(pixel.x*10, pixel.y*10, 10, 10);
+                var drawX = pixel.x * pixelSize;
+                var drawY = pixel.y * pixelSize;
+                var image = elementImages[pixel.element];
+                if (image && image.complete && image.naturalWidth > 0) {
+                    ctx.drawImage(image, drawX, drawY, pixelSize, pixelSize);
+                } else {
+                    // Keep the game visible if an image is still loading or could not be loaded.
+                    ctx.fillStyle = pixel.color;
+                    ctx.fillRect(drawX, drawY, pixelSize, pixelSize);
+                }
             }
             // If mouseIsDown, do mouse1Action
             if (mouseIsDown) {
@@ -246,6 +265,8 @@
             var gameCanvas = document.getElementById("game");
             // Get context
             var ctx = gameCanvas.getContext("2d");
+            // Keep scaled pixel-art textures crisp.
+            ctx.imageSmoothingEnabled = false;
             var newWidth  = Math.ceil(window.innerWidth*0.9 / 10) * 10;
             var newHeight = Math.ceil(window.innerHeight*0.675 / 10) * 10;
             // If the new width is greater than 800, set it to 800
